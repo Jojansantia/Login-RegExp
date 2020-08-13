@@ -3,12 +3,20 @@ import Validacion from './Validacion';
 
 const Login = () => {
 
+    const [username, guardarUsername] = useState("");
     const [password, guardarPassword] = useState("");
+    
     const [tipo, guardarTipo] = useState("password");
+    const [validacionUser, setValidacionUser] = useState('')
     const [validacion, guardarValidacion] = useState({
         validate:"",
         color:""
     });
+
+    const [alerta, cambiarAlerta] = useState({
+        bool: false,
+        mensaje: ''
+    })
 
     const [regexp] = useState([
         /(?=^.{6,}$)/,
@@ -30,13 +38,29 @@ const Login = () => {
     }
 
     const handleButton = () => {
+        if(username.length < 10){
+            cambiarAlerta({bool: true, mensaje: '¡Error! El Username debe tener más de 10 carácteres.'})
+            setTimeout(() => {
+                cambiarAlerta({bool: false, mensaje:''})
+            }, 2000);
+            return;
+        }
+        if(!regexp.every(reg => password.match(reg))){
+            cambiarAlerta({bool: true, mensaje: '¡Error! La password no cumple las validaciones requeridas.'})
+            setTimeout(() => {
+                cambiarAlerta({bool: false, mensaje:''})
+            }, 2000);
+            return;
+        }
         guardarPassword("")
+        guardarUsername("")
     }
 
     let cls=`relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacion.color}`
+    let cls2=`relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacionUser}`
 
     useEffect(() => {
-        if(password.length >= 0){
+        if(password.length > 0){
             if(password.length < 3){
                 guardarValidacion({
                     color:"border-red-700"
@@ -58,20 +82,56 @@ const Login = () => {
         }
     }, [password]);
 
+    useEffect(() => {
+        if(username.length > 0){
+            if(username.length < 3){
+                setValidacionUser(
+                    "border-red-700")
+            }else if(username.length >= 5 && username.length < 10){
+                setValidacionUser("border-yellow-700"
+                )
+            }else if(username.length >= 10){
+                setValidacionUser("border-green-700"
+                )
+            }
+        }else{
+            setValidacionUser('')
+        }
+    }, [username]);
+
     return ( 
         <>
-            <div className="container  m-auto mt-5 w-3/5 border">
-                <h1 className="text-gray-700 text-center font-bold uppercase text-5x1 mt-3">
-                    Login
-                </h1>  
-                <div className="">
-                    <label className="mx-1 mt-4 p-2 w-1/6 block text-gray-700 text-sm font-bold " htmlFor="password">
+            <h1 className="text-white text-center font-bold uppercase text-3xl mt-32">
+                Login
+            </h1>  
+
+            {alerta.bool && <p className="bg-red-400 font-bold text-center w-2/5 m-auto my-5 text-white p-2">{alerta.mensaje}</p>}
+
+            <div className="container m-auto w-2/5 border px-4 " id="fondo_inicio" >
+
+                <div >
+                    <label className="mx-1 mt-4 p-2 w-1/6 block text-gray-700 text-sm font-bold " htmlFor="username">
+                        Username
+                    </label>
+                    <div className="flex w-full justify-between relative inline-block">
+                        <input
+                            className={cls2}
+                            id="username"
+                            type="text"
+                            onChange={e => guardarUsername(e.target.value)}
+                            value={username}
+                        />
+                    </div>
+                </div>
+
+                <div >
+                    <label className="mx-1 mt-2 p-2 w-1/6 block text-gray-700 text-sm font-bold " htmlFor="password">
                         Password
                     </label>
                     <div className="flex w-full justify-between relative inline-block">
                         <input
                             className={cls}
-                            id="username"
+                            id="password"
                             type={tipo}
                             onChange={e => guardarPassword(e.target.value)}
                             value={password}
@@ -85,8 +145,7 @@ const Login = () => {
                     </div>
                 </div>
 
-                {/* { validacion.validate && <p className="text-center ">{validacion.validate}</p> } */}
-
+                <div className="flex flex-wrap ">
                 {
                     frases.map( (frase, i) => (
                         <Validacion 
@@ -98,14 +157,14 @@ const Login = () => {
                         />
                     ))
                 } 
-                
+            </div>
                 <div className="flex justify-center my-2">
                     <button
                         onClick={handleButton}
                         id="button"
-                        className="bg-gray-800 rounded p-2 text-white uppercase hover:bg-gray-900"
+                        className="bg-blue-800 rounded p-2 text-white uppercase hover:bg-blue-900"
                     >
-                        Guardar
+                        Iniciar Sesión
                     </button>
                 </div>
                     {/* <div className="flex">

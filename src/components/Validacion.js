@@ -9,12 +9,12 @@ const Validacion = ({password, regexp, frase}) => {
     return ( 
         <>
             { (password.match(regexp)) ?
-                <div className="flex justify-center">
+                <div className="flex w-1/2 pl-2">
                     {check}
                     {parrafo}
                 </div>
                 :
-                <div className="flex justify-center text-gray-500">
+                <div className="flex w-1/2 pl-2 text-gray-600">
                     {uncheck}
                     {parrafo}
                 </div>
