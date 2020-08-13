@@ -15,7 +15,7 @@ const Login = () => {
 
     const [alerta, cambiarAlerta] = useState({
         bool: false,
-        mensaje: ''
+        tipo: ''
     })
 
     const [regexp] = useState([
@@ -39,25 +39,39 @@ const Login = () => {
 
     const handleButton = () => {
         if(username.length < 10){
-            cambiarAlerta({bool: true, mensaje: '¡Error! El Username debe tener más de 10 carácteres.'})
+            cambiarAlerta({
+                bool: true,
+                tipo: 'user',
+                mensaje:'¡Error! El nombre de usuario debe tener más de 10 carácteres.'})
             setTimeout(() => {
-                cambiarAlerta({bool: false, mensaje:''})
+                cambiarAlerta({})
             }, 2000);
             return;
-        }
-        if(!regexp.every(reg => password.match(reg))){
-            cambiarAlerta({bool: true, mensaje: '¡Error! La password no cumple las validaciones requeridas.'})
+        }else if(!regexp.every(reg => password.match(reg))){
+            cambiarAlerta({
+                bool: true,
+                tipo: 'pass', 
+                mensaje:'¡Error! La password no cumple las validaciones requeridas.'})
             setTimeout(() => {
-                cambiarAlerta({bool: false, mensaje:''})
+                cambiarAlerta({})
             }, 2000);
             return;
+        }else{
+            cambiarAlerta({
+                bool: true,
+                tipo: 'login', 
+                mensaje: `${username} haz iniciado sesión correctamente.`})
+            setTimeout(() => {
+                cambiarAlerta({})
+            }, 4000);
+            guardarPassword("")
+            guardarUsername("")
         }
-        guardarPassword("")
-        guardarUsername("")
     }
 
-    let cls=`relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacion.color}`
-    let cls2=`relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacionUser}`
+    let classPass = `relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacion.color}`
+    let classUser = `relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacionUser}`
+    let classAlert = `${alerta.tipo === 'login' ? 'bg-green-400' : 'bg-red-400'} font-bold text-center w-2/5 m-auto my-5 text-white p-2`
 
     useEffect(() => {
         if(password.length > 0){
@@ -85,14 +99,11 @@ const Login = () => {
     useEffect(() => {
         if(username.length > 0){
             if(username.length < 3){
-                setValidacionUser(
-                    "border-red-700")
+                setValidacionUser("border-red-700")
             }else if(username.length >= 5 && username.length < 10){
-                setValidacionUser("border-yellow-700"
-                )
+                setValidacionUser("border-yellow-700")
             }else if(username.length >= 10){
-                setValidacionUser("border-green-700"
-                )
+                setValidacionUser("border-green-700")
             }
         }else{
             setValidacionUser('')
@@ -105,17 +116,21 @@ const Login = () => {
                 Login
             </h1>  
 
-            {alerta.bool && <p className="bg-red-400 font-bold text-center w-2/5 m-auto my-5 text-white p-2">{alerta.mensaje}</p>}
+            {alerta.bool && 
+                <p className={classAlert}>
+                    {alerta.mensaje}
+                </p>
+            }
 
-            <div className="container m-auto w-2/5 border px-4 " id="fondo_inicio" >
+            <div className="container m-auto w-2/5 border px-4 rounded-lg" id="fondo_inicio" >
 
                 <div >
-                    <label className="mx-1 mt-4 p-2 w-1/6 block text-gray-700 text-sm font-bold " htmlFor="username">
-                        Username
+                    <label className="mx-1 mt-4 p-2 block text-gray-800 text-sm font-bold " htmlFor="username">
+                        Nombre de Usuario
                     </label>
                     <div className="flex w-full justify-between relative inline-block">
                         <input
-                            className={cls2}
+                            className={classUser}
                             id="username"
                             type="text"
                             onChange={e => guardarUsername(e.target.value)}
@@ -125,12 +140,12 @@ const Login = () => {
                 </div>
 
                 <div >
-                    <label className="mx-1 mt-2 p-2 w-1/6 block text-gray-700 text-sm font-bold " htmlFor="password">
-                        Password
+                    <label className="mx-1 mt-2 p-2 block text-gray-800 text-sm font-bold " htmlFor="password">
+                        Contraseña
                     </label>
                     <div className="flex w-full justify-between relative inline-block">
                         <input
-                            className={cls}
+                            className={classPass}
                             id="password"
                             type={tipo}
                             onChange={e => guardarPassword(e.target.value)}
@@ -175,7 +190,6 @@ const Login = () => {
             </div>
         </>
     );
-
 }
  
 export default Login;
