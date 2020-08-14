@@ -122,7 +122,7 @@ const Login = () => {
                 </p>
             }
 
-            <div className="container m-auto w-4/5 border px-4 rounded-lg" id="fondo_inicio" >
+            <div className="container m-auto w-4/5 md:w-2/5 border px-4 rounded-lg" id="fondo_inicio" >
 
                 <div >
                     <label className="mx-1 mt-4 p-2 block text-gray-800 text-sm font-bold " htmlFor="username">
