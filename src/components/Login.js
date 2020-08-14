@@ -69,10 +69,6 @@ const Login = () => {
         }
     }
 
-    let classPass = `relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacion.color}`
-    let classUser = `relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacionUser}`
-    let classAlert = `${alerta.tipo === 'login' ? 'bg-green-400' : 'bg-red-400'} font-bold text-center w-2/5 m-auto my-5 text-white p-2`
-
     useEffect(() => {
         if(password.length > 0){
             if(password.length < 3){
@@ -110,9 +106,13 @@ const Login = () => {
         }
     }, [username]);
 
+    let classPass = `relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacion.color}`
+    let classUser = `relative focus:outline-none focus:shadow-2xl border-2 rounded w-full mx-2 mb-2 p-2 ${validacionUser}`
+    let classAlert = `${alerta.tipo === 'login' ? 'bg-green-400' : 'bg-red-400'} font-bold text-center w-2/5 m-auto my-5 text-white p-2`
+
     return ( 
         <>
-            <h1 className="text-white text-center font-bold uppercase text-3xl mt-32">
+            <h1 className="text-white text-center font-bold uppercase text-3xl mt-24 md:mt-32">
                 Login
             </h1>  
 
@@ -122,7 +122,7 @@ const Login = () => {
                 </p>
             }
 
-            <div className="container m-auto w-2/5 border px-4 rounded-lg" id="fondo_inicio" >
+            <div className="container m-auto w-4/5 border px-4 rounded-lg" id="fondo_inicio" >
 
                 <div >
                     <label className="mx-1 mt-4 p-2 block text-gray-800 text-sm font-bold " htmlFor="username">
